@@ -1,0 +1,5 @@
+br\com\livros\model\Usuario.class
+br\com\livros\dao\UsuarioDAO.class
+br\com\livros\controller\UsuarioController.class
+br\com\livros\config\MysqlSingleton.class
+br\com\livros\service\UsuarioService.class
