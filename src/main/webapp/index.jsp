@@ -9,7 +9,7 @@
     <title>Sistema de Intercâmbio - Teste MVC</title>
 </head>
 <body>
-    <h2>Usuários Cadastrados (Padrão MVC Correto):</h2>
+    <h2>Usuários Cadastrados (Padrão MVC):</h2>
     <ul>
         <%
             // ESTA É A LINHA QUE FALTAVA! 
