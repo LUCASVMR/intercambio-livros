@@ -12,8 +12,6 @@
     <h2>Usuários Cadastrados (Padrão MVC):</h2>
     <ul>
         <%
-            // ESTA É A LINHA QUE FALTAVA! 
-            // Ela pega a lista que o Servlet preparou e guarda na variável 'usuarios'
             List<Usuario> usuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
             
             if(usuarios != null && !usuarios.isEmpty()){
