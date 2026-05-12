@@ -1,10 +1,11 @@
 USE intercambio_livros;
 
--- Tabela de Usuários 
+-- Tabela de Usuários
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL -- Nova coluna adicionada!
 );
 
 -- Tabela de Livros 
