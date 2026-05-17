@@ -1,6 +1,7 @@
 package br.com.livros.controller;
 
 import br.com.livros.dao.LivroDAO;
+import br.com.livros.dao.TrocaDAO;
 import br.com.livros.model.Livro;
 import br.com.livros.model.Usuario;
 
@@ -12,69 +13,105 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
-/**
- * Servlet responsável pelo cadastro de livros.
- * Rota mapeada: POST /livros
- */
 @WebServlet("/livros")
 public class LivroController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Recebe os dados do formulário, associa o livro ao usuário logado
-     * e persiste no banco via LivroDAO.
-     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-
-        // 1. Valida sessão — impede acesso direto sem login
         HttpSession sessao = request.getSession(false);
         if (sessao == null || sessao.getAttribute("usuario") == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
-        // 2. Recupera o usuário logado da sessão
         Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuario");
-        int idDono = usuarioLogado.getId();
+        LivroDAO livroDAO = new LivroDAO();
 
-        // 3. Lê os parâmetros do formulário
+        List<Livro> livrosDisponiveis = livroDAO.listarDeOutrosUsuarios(usuarioLogado.getId());
+        List<Livro> meusLivros = livroDAO.listarDoUsuario(usuarioLogado.getId());
+
+        request.setAttribute("livrosDisponiveis", livrosDisponiveis);
+        request.setAttribute("meusLivros", meusLivros);
+
+        request.getRequestDispatcher("/livros.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+
+        HttpSession sessao = request.getSession(false);
+        if (sessao == null || sessao.getAttribute("usuario") == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        String acao = request.getParameter("acao");
+        if ("propor".equals(acao)) {
+            proporTroca(request, response, sessao);
+            return;
+        }
+
+        // Cadastro de livro
+        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuario");
+
         String titulo = request.getParameter("titulo");
-        String autor  = request.getParameter("autor");
+        String autor = request.getParameter("autor");
 
-        // 4. Validação mínima dos campos
         if (titulo == null || titulo.trim().isEmpty()
                 || autor == null || autor.trim().isEmpty()) {
-            // Volta para o dashboard sem persistir
             response.sendRedirect(request.getContextPath() + "/troca");
             return;
         }
 
-        // 5. Monta o objeto Livro
         Livro novoLivro = new Livro();
         novoLivro.setTitulo(titulo.trim());
         novoLivro.setAutor(autor.trim());
-        novoLivro.setUsuarioId(idDono);
+        novoLivro.setUsuarioId(usuarioLogado.getId());
 
-        // 6. Persiste via DAO
-        LivroDAO livroDAO = new LivroDAO();
-        livroDAO.cadastrarLivro(novoLivro);
-
-        // 7. Redireciona de volta ao dashboard (via TrocaController GET)
+        new LivroDAO().cadastrarLivro(novoLivro);
         response.sendRedirect(request.getContextPath() + "/troca");
     }
 
-    /**
-     * Redireciona acessos GET diretos para o dashboard.
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/troca");
+    private void proporTroca(HttpServletRequest request, HttpServletResponse response, HttpSession sessao)
+            throws IOException {
+
+        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuario");
+
+        try {
+            int livroOferecidoId = Integer.parseInt(request.getParameter("livroOferecidoId"));
+            int livroRecebidoId = Integer.parseInt(request.getParameter("livroRecebidoId"));
+
+            // Busca o dono do livro desejado para popular usuario_solicitado_id
+            int usuarioSolicitadoId = new LivroDAO().buscarDonoPorLivro(livroRecebidoId);
+
+            if (usuarioSolicitadoId == -1) {
+                sessao.setAttribute("erro", "Não foi possível identificar o dono do livro.");
+                response.sendRedirect(request.getContextPath() + "/livros");
+                return;
+            }
+
+            boolean ok = new TrocaDAO().inserirTroca(
+                    livroOferecidoId, livroRecebidoId,
+                    usuarioLogado.getId(), usuarioSolicitadoId);
+
+            if (ok) {
+                sessao.setAttribute("mensagem", "Proposta enviada com sucesso!");
+            } else {
+                sessao.setAttribute("erro", "Não foi possível enviar a proposta.");
+            }
+        } catch (NumberFormatException e) {
+            sessao.setAttribute("erro", "Dados inválidos na proposta.");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/livros");
     }
 }

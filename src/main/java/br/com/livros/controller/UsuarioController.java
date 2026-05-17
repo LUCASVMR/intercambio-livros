@@ -46,7 +46,7 @@ public class UsuarioController extends HttpServlet {
             HttpSession sessao = request.getSession();
             sessao.setAttribute("usuario", usuarioLogado);
 
-            response.sendRedirect(request.getContextPath() + "/principal.jsp");
+            response.sendRedirect(request.getContextPath() + "/troca"); 
         } else {
             request.setAttribute("erroLogin", "E-mail ou senha incorretos.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);

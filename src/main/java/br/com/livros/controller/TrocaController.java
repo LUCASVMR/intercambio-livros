@@ -1,8 +1,8 @@
 package br.com.livros.controller;
 
 import br.com.livros.dao.TrocaDAO;
+import br.com.livros.model.TrocaDetalhada;
 import br.com.livros.model.Usuario;
-import br.com.livros.model.Troca;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,9 +14,11 @@ import java.util.List;
 
 @WebServlet("/troca")
 public class TrocaController extends HttpServlet {
-    
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         HttpSession sessao = request.getSession();
         Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuario");
 
@@ -26,15 +28,18 @@ public class TrocaController extends HttpServlet {
         }
 
         TrocaDAO trocaDAO = new TrocaDAO();
-        List<Troca> pendentes = trocaDAO.listarTrocasPendentes(usuarioLogado.getId());
+        List<TrocaDetalhada> pendentes = trocaDAO.listarPendentesDetalhadas(usuarioLogado.getId());
+        List<TrocaDetalhada> minhasPropostas = trocaDAO.listarMinhasPropostas(usuarioLogado.getId());
 
         request.setAttribute("listaPendentes", pendentes);
+        request.setAttribute("minhasPropostas", minhasPropostas);
         request.getRequestDispatcher("/principal.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         HttpSession sessao = request.getSession();
         Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuario");
 
@@ -51,19 +56,13 @@ public class TrocaController extends HttpServlet {
                 int idTroca = Integer.parseInt(idTrocaStr);
                 String novoStatus = "";
 
-                if (acao.equals("aceitar")) {
+                if (acao.equals("aceitar"))
                     novoStatus = "ACEITA";
-                } else if (acao.equals("recusar")) {
+                else if (acao.equals("recusar"))
                     novoStatus = "RECUSADA";
-                }
 
                 if (!novoStatus.isEmpty()) {
-                    TrocaDAO trocaDAO = new TrocaDAO();
-                    boolean sucesso = trocaDAO.atualizarStatus(idTroca, novoStatus);
-
-                    if (sucesso) {
-                        System.out.println("LOG: Troca " + idTroca + " atualizada por " + usuarioLogado.getNome());
-                    }
+                    new TrocaDAO().atualizarStatus(idTroca, novoStatus);
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Erro: ID da troca inválido.");

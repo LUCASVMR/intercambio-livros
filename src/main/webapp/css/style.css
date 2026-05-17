@@ -4,7 +4,9 @@
    ============================================ */
 
 /* --- Reset & Base --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -162,8 +164,8 @@ body {
 .btn-aceitar {
     background-color: var(--cor-aceitar);
     color: #fff;
-    padding: 8px 18px;
-    font-size: 0.88rem;
+    padding: 7px 16px;
+    font-size: 0.85rem;
 }
 
 .btn-aceitar:hover {
@@ -175,9 +177,9 @@ body {
 .btn-recusar {
     background-color: var(--cor-recusar);
     color: #fff;
-    padding: 8px 18px;
-    font-size: 0.88rem;
-    margin-left: 8px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    margin-left: 6px;
 }
 
 .btn-recusar:hover {
@@ -225,7 +227,7 @@ body {
 }
 
 /* ============================================
-   DASHBOARD — ESTRUTURA PRINCIPAL
+   NAVBAR
    ============================================ */
 
 .navbar {
@@ -236,7 +238,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -275,14 +277,24 @@ body {
     color: #fff;
 }
 
+/* ============================================
+   DASHBOARD — LAYOUT
+   ============================================ */
+
 .dashboard-wrapper {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 24px;
+    max-width: 1400px;
+    margin: 32px auto;
+    padding: 0 32px;
     display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
     align-items: start;
+}
+
+/* Botão "Ver Livros" ocupa linha inteira */
+.dashboard-wrapper>div[style*="grid-column"],
+.dashboard-wrapper>div:first-child {
+    grid-column: 1 / -1;
 }
 
 /* ============================================
@@ -293,8 +305,10 @@ body {
     background: var(--cor-card);
     border-radius: 14px;
     box-shadow: var(--sombra);
-    padding: 28px 32px;
+    padding: 24px 28px;
     transition: var(--transicao);
+    animation: fadeInUp 0.35s ease;
+    overflow-x: auto;
 }
 
 .card-secao:hover {
@@ -302,7 +316,7 @@ body {
 }
 
 .card-secao h2 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--cor-primaria);
     margin-bottom: 6px;
@@ -323,14 +337,15 @@ body {
 }
 
 /* ============================================
-   TABELA DE TROCAS / NOTIFICAÇÕES
+   TABELAS
    ============================================ */
 
 .tabela-trocas {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 4px;
-    font-size: 0.92rem;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    min-width: 400px;
 }
 
 .tabela-trocas thead tr {
@@ -338,20 +353,22 @@ body {
 }
 
 .tabela-trocas th {
-    padding: 10px 14px;
+    padding: 10px 16px;
     text-align: left;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
     color: var(--cor-texto-suave);
     border-bottom: 2px solid var(--cor-borda);
+    white-space: nowrap;
 }
 
 .tabela-trocas td {
-    padding: 14px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--cor-borda);
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .tabela-trocas tr:last-child td {
@@ -364,49 +381,17 @@ body {
 
 .acoes-troca {
     display: flex;
-    gap: 0;
+    gap: 6px;
+    align-items: center;
     white-space: nowrap;
 }
 
-/* Linha vazia */
 .tabela-vazia {
     text-align: center;
-    padding: 36px !important;
+    padding: 32px !important;
     color: var(--cor-texto-suave);
     font-size: 0.9rem;
-}
-
-/* Notificação card (alternativo à tabela) */
-.notificacao-card {
-    border: 1px solid var(--cor-borda);
-    border-radius: var(--raio);
-    padding: 16px;
-    margin-bottom: 12px;
-    transition: var(--transicao);
-    background: #fafbfc;
-}
-
-.notificacao-card:hover {
-    border-color: var(--cor-secundaria);
-    background: #fff;
-}
-
-.notificacao-card .livros-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-    font-size: 0.92rem;
-    color: var(--cor-texto);
-}
-
-.notificacao-card .livros-info strong {
-    color: var(--cor-primaria);
-}
-
-.notificacao-card .seta {
-    color: var(--cor-texto-suave);
-    font-size: 1.1rem;
+    white-space: normal;
 }
 
 /* ============================================
@@ -425,26 +410,12 @@ body {
    RESPONSIVIDADE
    ============================================ */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
     .dashboard-wrapper {
         grid-template-columns: 1fr;
         margin: 20px auto;
         padding: 0 16px;
         gap: 20px;
-    }
-
-    .navbar {
-        padding: 0 16px;
-    }
-
-    .card-secao {
-        padding: 20px;
-    }
-
-    .tabela-trocas th,
-    .tabela-trocas td {
-        padding: 10px 8px;
-        font-size: 0.85rem;
     }
 }
 
@@ -453,10 +424,23 @@ body {
         padding: 32px 24px;
     }
 
+    .navbar {
+        padding: 0 16px;
+    }
+
+    .card-secao {
+        padding: 16px;
+    }
+
+    .tabela-trocas th,
+    .tabela-trocas td {
+        padding: 10px 10px;
+        font-size: 0.82rem;
+    }
+
     .btn-aceitar,
     .btn-recusar {
-        padding: 7px 12px;
-        font-size: 0.82rem;
+        margin-left: 0;
     }
 }
 
@@ -467,14 +451,11 @@ body {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.card-secao {
-    animation: fadeInUp 0.35s ease;
 }

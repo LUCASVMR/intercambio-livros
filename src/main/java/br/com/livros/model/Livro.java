@@ -1,19 +1,14 @@
 package br.com.livros.model;
 
 public class Livro {
+
     private int id;
     private String titulo;
     private String autor;
-    private int usuarioId; 
-   
-    public Livro() {
-    }
+    private int usuarioId;
+    private String nomeDono;
 
-    public Livro(int id, String titulo, String autor, int usuarioId) {
-        this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.usuarioId = usuarioId;
+    public Livro() {
     }
 
     public int getId() {
@@ -46,5 +41,13 @@ public class Livro {
 
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public String getNomeDono() {
+        return nomeDono;
+    }
+
+    public void setNomeDono(String nomeDono) {
+        this.nomeDono = nomeDono;
     }
 }
