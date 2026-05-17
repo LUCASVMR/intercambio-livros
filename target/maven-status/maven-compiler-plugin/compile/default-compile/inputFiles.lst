@@ -1,5 +1,12 @@
-C:\lucas\intercabio-livros\intercambio-livros\src\main\java\br\com\livros\model\Usuario.java
-C:\lucas\intercabio-livros\intercambio-livros\src\main\java\br\com\livros\config\MysqlSingleton.java
-C:\lucas\intercabio-livros\intercambio-livros\src\main\java\br\com\livros\controller\UsuarioController.java
-C:\lucas\intercabio-livros\intercambio-livros\src\main\java\br\com\livros\service\UsuarioService.java
-C:\lucas\intercabio-livros\intercambio-livros\src\main\java\br\com\livros\dao\UsuarioDAO.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\service\TrocaService.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\dao\LivroDAO.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\controller\LivroController.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\dao\TrocaDAO.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\model\Livro.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\model\Troca.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\model\Usuario.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\controller\TrocaController.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\controller\UsuarioController.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\config\MysqlSingleton.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\dao\UsuarioDAO.java
+C:\lucas\intercambio-livros\src\main\java\br\com\livros\service\UsuarioService.java
