@@ -1,19 +1,18 @@
 package br.com.livros.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import br.com.livros.dao.LivroDAO;
 import br.com.livros.dao.TrocaDAO;
 import br.com.livros.model.Livro;
 import br.com.livros.model.Usuario;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/livros")
 public class LivroController extends HttpServlet {
@@ -68,8 +67,8 @@ public class LivroController extends HttpServlet {
 
         if (titulo == null || titulo.trim().isEmpty()
                 || autor == null || autor.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/troca");
-            return;
+              response.sendRedirect(request.getContextPath() + "/troca");           
+               return;
         }
 
         Livro novoLivro = new Livro();
@@ -78,7 +77,7 @@ public class LivroController extends HttpServlet {
         novoLivro.setUsuarioId(usuarioLogado.getId());
 
         new LivroDAO().cadastrarLivro(novoLivro);
-        response.sendRedirect(request.getContextPath() + "/troca");
+        response.sendRedirect(request.getContextPath() + "/livros");
     }
 
     private void proporTroca(HttpServletRequest request, HttpServletResponse response, HttpSession sessao)
